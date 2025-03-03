@@ -5,5 +5,6 @@ for i in $(seq $1); do
 	if git push; then
 		exit 0
 	fi
+	sleep 1
 done
 exit 1
