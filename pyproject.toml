@@ -30,6 +30,7 @@ dependencies = [
   "openpyxl>=3.1.0",
   "pact-python>=1.6.0",
   "pandas>=1.5.3",
+  "polars>=1.24.0",
   "pyarrow>=11.0.0",
   "python-dateutil>=2.8.2",
   "python-magic>=0.4.27",
