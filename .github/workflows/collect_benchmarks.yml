@@ -1,0 +1,42 @@
+name: Collect benchmarks
+
+on:
+  workflow_run:
+    workflows: ["Run benchmarks main"]
+    types:
+      - completed
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  collect_benchmarks:
+    name: Collect benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Checkout benchmarks-data branch
+        uses: actions/checkout@v4
+        with:
+          ref: benchmarks-data
+
+      - name: Install dependencies
+        run: pip install polars
+
+      - name: Collect benchmarks
+        run: python collect_benchmarks.py -i uncollected -o benchmarks.csv
+
+      - name: Remove now collected benchmarks
+        run: rm uncollected/*
+
+      - name: Add and commit
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add --all
+          git commit -m "Collect benchmarks"
+          git push
