@@ -28,7 +28,7 @@ jobs:
         working-directory: ./main
 
       - name: Extract benchmarks
-        run: python benchmarking/scripts/extract_benchmarks.py -i benchmarks.json -o benchmarks.csv -t ubuntu-latest
+        run: python scripts/extract_benchmarks.py -i benchmarks.json -o benchmarks.csv -t ubuntu-latest
         working-directory: ./main
 
       - name: Checkout benchmarks-data branch
@@ -61,33 +61,19 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Checkout main branch
-        uses: actions/checkout@v4
-        with:
-          ref: main
-          path: main
-
       - name: Checkout benchmarks-data branch
         uses: actions/checkout@v4
         with:
           ref: benchmarks-data
-          path: benchmarks-data
-
-      - name: Copy script to collect benchmarks
-        run: cp ../main/benchmarking/scripts/collect_benchmarks.py collect_benchmarks.py
-        working-directory: ./benchmarks-data
 
       - name: Install dependencies
         run: pip install polars
-        working-directory: ./benchmarks-data
 
       - name: Collect benchmarks
         run: python collect_benchmarks.py -i uncollected -o benchmarks.csv
-        working-directory: ./benchmarks-data
 
       - name: Remove now collected benchmarks
         run: rm uncollected/*
-        working-directory: ./benchmarks-data
 
       - name: Add and commit
         run: |
@@ -96,4 +82,3 @@ jobs:
           git add --all
           git commit -m "Collect benchmarks"
           git push
-        working-directory: ./benchmarks-data
