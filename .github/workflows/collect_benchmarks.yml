@@ -28,7 +28,7 @@ jobs:
         run: pip install polars
 
       - name: Collect benchmarks
-        run: python collect_benchmarks.py -i uncollected -o benchmarks.csv
+        run: python scripts/collect_benchmarks.py -i uncollected -o benchmarks.csv
 
       - name: Remove now collected benchmarks
         run: rm uncollected/*
