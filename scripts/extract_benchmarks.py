@@ -29,6 +29,7 @@ def main():
     commit_author_timestamp = _parse_datetime(
         benchmarks_json["commit_info"]["author_time"]
     )
+    python_version = benchmarks_json["machine_info"]["python_version"]
 
     rows = []
     for benchmark in benchmarks_json["benchmarks"]:
@@ -40,6 +41,7 @@ def main():
                 "commit_branch": commit_branch,
                 "commit_timestamp": commit_timestamp.isoformat(),
                 "commit_author_timestamp": commit_author_timestamp.isoformat(),
+                "python_version": python_version,
                 "benchmark_name": benchmark["name"],
                 "benchmark_fullname": benchmark["fullname"],
                 "benchmark_mean_s": round(benchmark["stats"]["mean"], 9),
