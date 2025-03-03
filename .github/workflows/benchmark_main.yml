@@ -1,0 +1,49 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run_benchmarks:
+    name: Run benchmarks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.9'
+
+      - name: Checkout main branch
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: main
+
+      - name: Install dependencies
+        run: make install
+        working-directory: ./main
+
+      - name: Run benchmarks
+        run: pytest --benchmark-only --benchmark-json benchmarks.json
+        working-directory: ./main
+
+      - name: Extract benchmarks
+        run: python benchmarking/scripts/extract_benchmarks.py -i benchmarks.json -o benchmarks.csv -t ubuntu-latest
+        working-directory: ./main
+
+      - name: Checkout benchmarks-data branch
+        uses: actions/checkout@v4
+        with:
+          ref: benchmarks-data
+          path: benchmarks-data
+
+      - name: Add and commit benchmarks data
+        run: |
+          uuid=$(uuidgen)
+          cp ../main/benchmarks.csv "./uncollected/$uuid.csv"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add "./uncollected/$uuid.csv"
+          git commit -m "Add uncollected benchmarks $uuid.csv"
+          git push
+        working-directory: ./benchmarks-data
