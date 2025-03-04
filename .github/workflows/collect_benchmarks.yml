@@ -30,7 +30,7 @@ jobs:
         run: pip install polars
 
       - name: Collect benchmarks
-        run: python scripts/collect_benchmarks.py -i 'uncollected/*' -o benchmarks.csv
+        run: python scripts/collect_benchmarks.py -i 'uncollected/*.csv' -o benchmarks.csv
 
       - name: Remove now collected benchmarks
         run: rm uncollected/*.csv
@@ -39,9 +39,10 @@ jobs:
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
+          
           git add --all
           git commit -m "Collect benchmarks"
-          git status
+          
           # Retry below incase another workflow pushed to the benchmarks-data branch since we checked it out.
           # Unlikely but technically possible...
           # There won't be a merge conflict since this workflow is the only workflow touching benchmarks.csv
