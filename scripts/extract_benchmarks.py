@@ -9,7 +9,7 @@ import pytz
 
 
 def _parse_datetime(s: str) -> datetime.datetime:
-    return datetime.datetime.fromisoformat(s).astimezone(pytz.UTC)
+    return datetime.datetime.fromisoformat(s).astimezone(datetime.UTC)
 
 
 def main():
