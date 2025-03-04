@@ -5,7 +5,6 @@ import os
 import pathlib
 
 import polars as pl
-import pytz
 
 
 def _parse_datetime(s: str) -> datetime.datetime:
