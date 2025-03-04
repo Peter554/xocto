@@ -21,16 +21,11 @@ jobs:
         with:
           ref: benchmarks-data
 
-      - name: Setup python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install dependencies
-        run: pip install polars
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
 
       - name: Collect benchmarks
-        run: python scripts/collect_benchmarks.py -i 'uncollected/*.csv' -o benchmarks.csv
+        run: uv run scripts/collect_benchmarks.py -i 'uncollected/*.csv' -o benchmarks.csv
 
       - name: Remove now collected benchmarks
         run: rm uncollected/*.csv
