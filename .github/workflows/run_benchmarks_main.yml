@@ -58,23 +58,21 @@ jobs:
           name: benchmarks_json
 
       - name: Extract benchmarks
-        run: python scripts/extract_benchmarks.py -i benchmarks.json -o benchmarks.csv -t ubuntu-latest
+        run: |
+          python scripts/extract_benchmarks.py \
+            -i benchmarks.json \
+            -o "uncollected/$(uuidgen).csv" \
+            -t ubuntu-latest
 
-      - name: Upload artifact - benchmarks CSV
-        uses: actions/upload-artifact@v4
-        with:
-          name: benchmarks_csv
-          path: benchmarks.csv
+      - name: Remove benchmarks JSON
+        run: rm benchmarks.json
 
       - name: Add and commit benchmarks data
         run: |
-          uuid=$(uuidgen)
-          mv benchmarks.csv "uncollected/$uuid.csv"
-          rm benchmarks.json
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add "uncollected/$uuid.csv"
-          git commit -m "Add uncollected benchmarks $uuid.csv"
+          git add --all
+          git commit -m "Add uncollected benchmarks"
           git status
           # Retry below incase another workflow pushed to the benchmarks-data branch since we checked it out.
           # Unlikely but technically possible...

@@ -33,7 +33,7 @@ jobs:
         run: python scripts/collect_benchmarks.py -i 'uncollected/*' -o benchmarks.csv
 
       - name: Remove now collected benchmarks
-        run: rm uncollected/*.json
+        run: rm uncollected/*.csv
 
       - name: Add and commit
         run: |
