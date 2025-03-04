@@ -20,7 +20,7 @@ def main():
     else:
         os.makedirs(output_path.parent, exist_ok=True)
 
-    for uncollected_file in glob.glob(f"{args.input.rstrip('/')}/*"):
+    for uncollected_file in glob.glob(args.input):
         dfs.append(pl.read_csv(uncollected_file))
 
     df = pl.concat(dfs)
